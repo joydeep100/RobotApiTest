@@ -1,0 +1,8 @@
+robotframework>=3.1.2
+robotframework-requests>=0.6.6
+robotframework-datadriver
+robotframework-datadriver[XLS]
+pandas
+python-dateutil
+pytz
+xlrd
