@@ -2,19 +2,23 @@
 Resource    ../common/library_imports.robot
 Resource    ../common/variables.robot
 
-Test Template     Method Switcher
+Test Template     METHOD SWITCHER
 
 *** Test Case ***
-When i initiate a {method} request to ${params} i should see ${resp_code} and ${resp_body}
-# if test name is empty the data file then the test name
-# mentioned here is over ridden in the report
+Validating a {method} request with ${params}, i should see ${resp_code} and ${resp_body}, [DEBUG MODE]::${failure_tag}
 
 ***** *Keywords* *****
 METHOD SWITCHER
-    [Arguments]    ${method}    ${params}    ${resp_code}    ${resp_body}
+    [Arguments]    ${method}    ${params}    ${resp_code}    ${resp_body}   ${failure_tag}
+
+    # pass execution if   '${failure_tag}'!='Y'   Skipping Test
+
+    # HACK [DEBUG MODE]:: We can use the above line when we want to run only a selected tests
+    # just mention ${failure_tag} as 'Y' in test_data.xlsx file
+
     ${method_type}  convert to lowercase    ${method}
     run keyword if      '${method_type}'=='get'   INVOKE GET VALIDATOR    ${params}    ${resp_code}    ${resp_body}
-    # run keyword if      '${method_type}'=='get'   INVOKE GET VALIDATOR    ${params}    ${resp_code}    ${resp_body}
+
 
 INVOKE GET VALIDATOR
     [Arguments]     ${params}    ${resp_code}    ${resp_body}
