@@ -29,7 +29,6 @@ RESTFUL SERVICE SWITCHER
 
 RESPONSE BODY PARSER AND VALIDATOR
     [Arguments]     ${resp_body}    ${server_response_json}
-
     @{items}    split string    ${resp_body}    \n   -1
     :FOR    ${i}    IN  @{items}
     \   @{item}    split string    ${i}    =
@@ -39,14 +38,12 @@ RESPONSE BODY PARSER AND VALIDATOR
 
 ENABLE DEBUGGER
     [Arguments]      ${debug_flag}
-
     pass execution if   '${debug_flag}'!='Y'   Skipping Test
     # [DEBUG MODE]:: We can use the above line when we want to run only a few selected tests
     # just mention ${debug_flag} row value as 'Y' in test_data.xlsx file
 
 GET VALIDATOR
     [Arguments]     ${query_params}    ${resp_code}    ${req_body}    ${resp_body}
-
     ${resp}     Get Request    app      /api/${query_params}
     Status Should Be    ${resp_code}    ${resp}
     ${len}      get length      ${resp_body}
@@ -54,7 +51,6 @@ GET VALIDATOR
 
 POST VALIDATOR
     [Arguments]     ${query_params}    ${resp_code}    ${req_body}    ${resp_body}
-
     ${resp}     Post Request    app      /api/${query_params}      ${req_body}
     Status Should Be    ${resp_code}    ${resp}
     ${len}      get length      ${resp_body}
@@ -62,7 +58,6 @@ POST VALIDATOR
 
 PUT VALIDATOR
     [Arguments]     ${query_params}    ${resp_code}    ${req_body}    ${resp_body}
-
     ${resp}     Put Request    app      /api/${query_params}      ${req_body}
     Status Should Be    ${resp_code}    ${resp}
     ${len}      get length      ${resp_body}
@@ -70,7 +65,6 @@ PUT VALIDATOR
 
 PATCH VALIDATOR
     [Arguments]     ${query_params}    ${resp_code}    ${req_body}    ${resp_body}
-
     ${resp}     Patch Request    app      /api/${query_params}      ${req_body}
     Status Should Be    ${resp_code}    ${resp}
     ${len}      get length      ${resp_body}
@@ -78,6 +72,5 @@ PATCH VALIDATOR
 
 DELETE VALIDATOR
     [Arguments]     ${query_params}    ${resp_code}    ${req_body}    ${resp_body}
-
     ${resp}     Delete Request    app      /api/${query_params}
     Status Should Be    ${resp_code}    ${resp}

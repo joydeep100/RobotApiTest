@@ -1,0 +1,1635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.2 (Python 3.7.3 on win32)" generated="20200422 11:35:55.595" rpa="false">
+<suite id="s1" name="Data Driven Tests" source="C:\Users\joyde\projs\RoboApiTest\test_scripts\data_driven_tests.robot">
+<kw name="Create Session" library="RequestsLibrary" type="setup">
+<doc>Create Session: create a HTTP session to a server</doc>
+<arguments>
+<arg>app</arg>
+<arg>${base_url}</arg>
+<arg>verify=true</arg>
+</arguments>
+<msg timestamp="20200422 11:35:56.379" level="INFO">Creating Session using : alias=app, url=https://reqres.in, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<status status="PASS" starttime="20200422 11:35:56.379" endtime="20200422 11:35:56.380"></status>
+</kw>
+<test id="s1-t1" name="LIST USERS">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>GET</arg>
+<arg>users?page=2</arg>
+<arg>200</arg>
+<arg>['page']=2
+['per_page']=6
+['ad']['company']=StatusCode Weekly</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.381" endtime="20200422 11:35:56.381"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.381" level="INFO">${method_type} = get</msg>
+<status status="PASS" starttime="20200422 11:35:56.381" endtime="20200422 11:35:56.381"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.382" level="INFO">@{args} = [ users?page=2 | 200 |  | ['page']=2
+['per_page']=6
+['ad']['company']=StatusCode Weekly ]</msg>
+<status status="PASS" starttime="20200422 11:35:56.381" endtime="20200422 11:35:56.382"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="GET VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.383" level="INFO">GET Request using : uri=/api/users?page=2, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:56.888" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:56.382" endtime="20200422 11:35:56.888"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.888" endtime="20200422 11:35:56.888"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.889" level="INFO">Length is 61</msg>
+<msg timestamp="20200422 11:35:56.889" level="INFO">${len} = 61</msg>
+<status status="PASS" starttime="20200422 11:35:56.889" endtime="20200422 11:35:56.889"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<kw name="RESPONSE BODY PARSER AND VALIDATOR">
+<arguments>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+<arg>\n</arg>
+<arg>-1</arg>
+</arguments>
+<assign>
+<var>@{items}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.890" level="INFO">@{items} = [ ['page']=2 | ['per_page']=6 | ['ad']['company']=StatusCode Weekly ]</msg>
+<status status="PASS" starttime="20200422 11:35:56.890" endtime="20200422 11:35:56.890"></status>
+</kw>
+<kw name="${i} IN [ @{items} ]" type="for">
+<kw name="${i} = ['page']=2" type="foritem">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${i}</arg>
+<arg>=</arg>
+</arguments>
+<assign>
+<var>@{item}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.891" level="INFO">@{item} = [ ['page'] | 2 ]</msg>
+<status status="PASS" starttime="20200422 11:35:56.891" endtime="20200422 11:35:56.891"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${server_response_json${item[0]}}</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.891" level="INFO">${key} = 2</msg>
+<status status="PASS" starttime="20200422 11:35:56.891" endtime="20200422 11:35:56.891"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${key}</arg>
+</arguments>
+<assign>
+<var>${key_str}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.892" level="INFO">${key_str} = 2</msg>
+<status status="PASS" starttime="20200422 11:35:56.891" endtime="20200422 11:35:56.892"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${key_str}</arg>
+<arg>${item[1]}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.892" endtime="20200422 11:35:56.892"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.891" endtime="20200422 11:35:56.892"></status>
+</kw>
+<kw name="${i} = ['per_page']=6" type="foritem">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${i}</arg>
+<arg>=</arg>
+</arguments>
+<assign>
+<var>@{item}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.892" level="INFO">@{item} = [ ['per_page'] | 6 ]</msg>
+<status status="PASS" starttime="20200422 11:35:56.892" endtime="20200422 11:35:56.892"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${server_response_json${item[0]}}</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.892" level="INFO">${key} = 6</msg>
+<status status="PASS" starttime="20200422 11:35:56.892" endtime="20200422 11:35:56.892"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${key}</arg>
+</arguments>
+<assign>
+<var>${key_str}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.893" level="INFO">${key_str} = 6</msg>
+<status status="PASS" starttime="20200422 11:35:56.893" endtime="20200422 11:35:56.893"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${key_str}</arg>
+<arg>${item[1]}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.893" endtime="20200422 11:35:56.893"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.892" endtime="20200422 11:35:56.893"></status>
+</kw>
+<kw name="${i} = ['ad']['company']=StatusCode Weekly" type="foritem">
+<kw name="Split String" library="String">
+<doc>Splits the ``string`` using ``separator`` as a delimiter string.</doc>
+<arguments>
+<arg>${i}</arg>
+<arg>=</arg>
+</arguments>
+<assign>
+<var>@{item}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.894" level="INFO">@{item} = [ ['ad']['company'] | StatusCode Weekly ]</msg>
+<status status="PASS" starttime="20200422 11:35:56.893" endtime="20200422 11:35:56.894"></status>
+</kw>
+<kw name="Set Variable" library="BuiltIn">
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<arguments>
+<arg>${server_response_json${item[0]}}</arg>
+</arguments>
+<assign>
+<var>${key}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.894" level="INFO">${key} = StatusCode Weekly</msg>
+<status status="PASS" starttime="20200422 11:35:56.894" endtime="20200422 11:35:56.894"></status>
+</kw>
+<kw name="Convert To String" library="BuiltIn">
+<doc>Converts the given item to a Unicode string.</doc>
+<arguments>
+<arg>${key}</arg>
+</arguments>
+<assign>
+<var>${key_str}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.894" level="INFO">${key_str} = StatusCode Weekly</msg>
+<status status="PASS" starttime="20200422 11:35:56.894" endtime="20200422 11:35:56.894"></status>
+</kw>
+<kw name="Should Be Equal" library="BuiltIn">
+<doc>Fails if the given objects are unequal.</doc>
+<arguments>
+<arg>${key_str}</arg>
+<arg>${item[1]}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.894" endtime="20200422 11:35:56.895"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.893" endtime="20200422 11:35:56.895"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.890" endtime="20200422 11:35:56.895"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.890" endtime="20200422 11:35:56.895"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.889" endtime="20200422 11:35:56.895"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.382" endtime="20200422 11:35:56.895"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.382" endtime="20200422 11:35:56.895"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.895" endtime="20200422 11:35:56.896"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.896" endtime="20200422 11:35:56.896"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.896" endtime="20200422 11:35:56.896"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.896" endtime="20200422 11:35:56.897"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.380" endtime="20200422 11:35:56.897"></status>
+</kw>
+<doc>Testing get method</doc>
+<tags>
+<tag>smoke</tag>
+</tags>
+<status status="PASS" starttime="20200422 11:35:56.380" endtime="20200422 11:35:56.897" critical="yes"></status>
+</test>
+<test id="s1-t2" name="SINGLE USER">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>GET</arg>
+<arg>users/2</arg>
+<arg>200</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:56.899" endtime="20200422 11:35:56.900"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.900" level="INFO">${method_type} = get</msg>
+<status status="PASS" starttime="20200422 11:35:56.900" endtime="20200422 11:35:56.900"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.901" level="INFO">@{args} = [ users/2 | 200 |  |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:56.900" endtime="20200422 11:35:56.901"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="GET VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:56.904" level="INFO">GET Request using : uri=/api/users/2, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:57.071" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:56.903" endtime="20200422 11:35:57.072"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.072" endtime="20200422 11:35:57.072"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.072" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:57.072" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:57.072" endtime="20200422 11:35:57.072"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.072" endtime="20200422 11:35:57.073"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.902" endtime="20200422 11:35:57.073"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.901" endtime="20200422 11:35:57.073"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.073" endtime="20200422 11:35:57.073"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.073" endtime="20200422 11:35:57.073"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.073" endtime="20200422 11:35:57.073"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.074" endtime="20200422 11:35:57.074"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.899" endtime="20200422 11:35:57.074"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:56.898" endtime="20200422 11:35:57.074" critical="yes"></status>
+</test>
+<test id="s1-t3" name="SINGLE USER NOT FOUND">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>GET</arg>
+<arg>users/23</arg>
+<arg>404</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.076" endtime="20200422 11:35:57.076"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.076" level="INFO">${method_type} = get</msg>
+<status status="PASS" starttime="20200422 11:35:57.076" endtime="20200422 11:35:57.076"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.077" level="INFO">@{args} = [ users/23 | 404 |  |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:57.076" endtime="20200422 11:35:57.077"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="GET VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.078" level="INFO">GET Request using : uri=/api/users/23, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:57.245" level="INFO">${resp} = &lt;Response [404]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:57.077" endtime="20200422 11:35:57.245"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.245" endtime="20200422 11:35:57.246"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.246" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:57.246" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:57.246" endtime="20200422 11:35:57.246"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.246" endtime="20200422 11:35:57.247"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.077" endtime="20200422 11:35:57.247"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.077" endtime="20200422 11:35:57.247"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.247" endtime="20200422 11:35:57.248"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.249" endtime="20200422 11:35:57.249"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.249" endtime="20200422 11:35:57.250"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.250" endtime="20200422 11:35:57.251"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.075" endtime="20200422 11:35:57.251"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.075" endtime="20200422 11:35:57.251" critical="yes"></status>
+</test>
+<test id="s1-t4" name="LIST &lt;RESOURCE&gt;">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>GET</arg>
+<arg>unknown</arg>
+<arg>200</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.253" endtime="20200422 11:35:57.254"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.254" level="INFO">${method_type} = get</msg>
+<status status="PASS" starttime="20200422 11:35:57.254" endtime="20200422 11:35:57.254"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.255" level="INFO">@{args} = [ unknown | 200 |  |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:57.254" endtime="20200422 11:35:57.255"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="GET VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.256" level="INFO">GET Request using : uri=/api/unknown, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:57.420" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:57.255" endtime="20200422 11:35:57.420"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.421" endtime="20200422 11:35:57.421"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.421" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:57.421" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:57.421" endtime="20200422 11:35:57.421"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.422" endtime="20200422 11:35:57.422"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.255" endtime="20200422 11:35:57.422"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.255" endtime="20200422 11:35:57.422"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.422" endtime="20200422 11:35:57.423"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.423" endtime="20200422 11:35:57.423"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.423" endtime="20200422 11:35:57.423"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.424" endtime="20200422 11:35:57.424"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.252" endtime="20200422 11:35:57.424"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.252" endtime="20200422 11:35:57.425" critical="yes"></status>
+</test>
+<test id="s1-t5" name="SINGLE &lt;RESOURCE&gt;">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>GET</arg>
+<arg>unknown/2</arg>
+<arg>200</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.426" endtime="20200422 11:35:57.426"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.426" level="INFO">${method_type} = get</msg>
+<status status="PASS" starttime="20200422 11:35:57.426" endtime="20200422 11:35:57.427"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.427" level="INFO">@{args} = [ unknown/2 | 200 |  |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:57.427" endtime="20200422 11:35:57.427"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="GET VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.430" level="INFO">GET Request using : uri=/api/unknown/2, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:57.595" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:57.429" endtime="20200422 11:35:57.595"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.595" endtime="20200422 11:35:57.595"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.595" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:57.595" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:57.595" endtime="20200422 11:35:57.595"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.596" endtime="20200422 11:35:57.596"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.428" endtime="20200422 11:35:57.596"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.428" endtime="20200422 11:35:57.596"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.596" endtime="20200422 11:35:57.596"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.596" endtime="20200422 11:35:57.596"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.597" endtime="20200422 11:35:57.597"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.597" endtime="20200422 11:35:57.597"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.425" endtime="20200422 11:35:57.597"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.425" endtime="20200422 11:35:57.598" critical="yes"></status>
+</test>
+<test id="s1-t6" name="SINGLE &lt;RESOURCE&gt; NOT FOUND">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>GET</arg>
+<arg>unknown/23</arg>
+<arg>404</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.600" endtime="20200422 11:35:57.600"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.600" level="INFO">${method_type} = get</msg>
+<status status="PASS" starttime="20200422 11:35:57.600" endtime="20200422 11:35:57.600"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.601" level="INFO">@{args} = [ unknown/23 | 404 |  |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:57.600" endtime="20200422 11:35:57.601"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="GET VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Get Request" library="RequestsLibrary">
+<doc>Send a GET request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.602" level="INFO">GET Request using : uri=/api/unknown/23, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:57.771" level="INFO">${resp} = &lt;Response [404]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:57.601" endtime="20200422 11:35:57.772"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.772" endtime="20200422 11:35:57.772"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.773" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:57.773" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:57.773" endtime="20200422 11:35:57.773"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.773" endtime="20200422 11:35:57.773"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.601" endtime="20200422 11:35:57.774"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.601" endtime="20200422 11:35:57.774"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.774" endtime="20200422 11:35:57.774"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.774" endtime="20200422 11:35:57.774"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.774" endtime="20200422 11:35:57.774"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.774" endtime="20200422 11:35:57.775"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.599" endtime="20200422 11:35:57.775"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.598" endtime="20200422 11:35:57.775" critical="yes"></status>
+</test>
+<test id="s1-t7" name="CREATE">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>POST</arg>
+<arg>users</arg>
+<arg>201</arg>
+<arg>{
+"name": "morpheus",
+"job": "leader"
+}</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.777" endtime="20200422 11:35:57.778"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.778" level="INFO">${method_type} = post</msg>
+<status status="PASS" starttime="20200422 11:35:57.778" endtime="20200422 11:35:57.778"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.778" level="INFO">@{args} = [ users | 201 | {
+"name": "morpheus",
+"job": "leader"
+} |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:57.778" endtime="20200422 11:35:57.778"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.778" endtime="20200422 11:35:57.779"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="POST VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Post Request" library="RequestsLibrary">
+<doc>Send a POST request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+<arg>${req_body}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.780" level="INFO">POST Request using : uri=/api/users, params=None, files=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:57.985" level="INFO">${resp} = &lt;Response [201]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:57.779" endtime="20200422 11:35:57.985"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.987" endtime="20200422 11:35:57.987"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.987" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:57.987" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:57.987" endtime="20200422 11:35:57.987"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.987" endtime="20200422 11:35:57.987"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.779" endtime="20200422 11:35:57.987"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.779" endtime="20200422 11:35:57.987"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.987" endtime="20200422 11:35:57.987"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.987" endtime="20200422 11:35:57.987"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.987" endtime="20200422 11:35:57.989"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.777" endtime="20200422 11:35:57.989"></status>
+</kw>
+<doc>Testing post method</doc>
+<tags>
+<tag>regression</tag>
+<tag>smoke</tag>
+</tags>
+<status status="PASS" starttime="20200422 11:35:57.777" endtime="20200422 11:35:57.989" critical="yes"></status>
+</test>
+<test id="s1-t8" name="UPDATE PATCH">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>PATCH</arg>
+<arg>users/2</arg>
+<arg>200</arg>
+<arg>{
+"name": "morpheus",
+"job": "zion resident2"
+}</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.990" endtime="20200422 11:35:57.990"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.991" level="INFO">${method_type} = patch</msg>
+<status status="PASS" starttime="20200422 11:35:57.991" endtime="20200422 11:35:57.991"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.991" level="INFO">@{args} = [ users/2 | 200 | {
+"name": "morpheus",
+"job": "zion resident2"
+} |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:57.991" endtime="20200422 11:35:57.991"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.991" endtime="20200422 11:35:57.991"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.992" endtime="20200422 11:35:57.992"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:57.992" endtime="20200422 11:35:57.992"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="PATCH VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Patch Request" library="RequestsLibrary">
+<doc>Send a PATCH request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+<arg>${req_body}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:57.993" level="INFO">PATCH Request using : uri=/api/users/2, params=None, files=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:58.188" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:57.993" endtime="20200422 11:35:58.188"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.188" endtime="20200422 11:35:58.190"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.191" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:58.192" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:58.190" endtime="20200422 11:35:58.192"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.192" endtime="20200422 11:35:58.193"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.992" endtime="20200422 11:35:58.193"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.992" endtime="20200422 11:35:58.193"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.194" endtime="20200422 11:35:58.195"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.990" endtime="20200422 11:35:58.195"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:57.989" endtime="20200422 11:35:58.196" critical="yes"></status>
+</test>
+<test id="s1-t9" name="UPDATE PUT">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>PATCH</arg>
+<arg>users/2</arg>
+<arg>200</arg>
+<arg>{
+"name": "morpheus",
+"job": "zion resident2"
+}</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.198" endtime="20200422 11:35:58.198"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.200" level="INFO">${method_type} = patch</msg>
+<status status="PASS" starttime="20200422 11:35:58.199" endtime="20200422 11:35:58.200"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.201" level="INFO">@{args} = [ users/2 | 200 | {
+"name": "morpheus",
+"job": "zion resident2"
+} |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:58.200" endtime="20200422 11:35:58.201"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.202" endtime="20200422 11:35:58.202"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.203" endtime="20200422 11:35:58.203"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.203" endtime="20200422 11:35:58.203"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="PATCH VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Patch Request" library="RequestsLibrary">
+<doc>Send a PATCH request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+<arg>${req_body}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.205" level="INFO">PATCH Request using : uri=/api/users/2, params=None, files=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:58.393" level="INFO">${resp} = &lt;Response [200]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:58.204" endtime="20200422 11:35:58.393"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.394" endtime="20200422 11:35:58.394"></status>
+</kw>
+<kw name="Get Length" library="BuiltIn">
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<arguments>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>${len}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.394" level="INFO">Length is 0</msg>
+<msg timestamp="20200422 11:35:58.394" level="INFO">${len} = 0</msg>
+<status status="PASS" starttime="20200422 11:35:58.394" endtime="20200422 11:35:58.394"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>${len}&gt;=1</arg>
+<arg>RESPONSE BODY PARSER AND VALIDATOR</arg>
+<arg>${resp_body}</arg>
+<arg>${resp.json()}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.394" endtime="20200422 11:35:58.394"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.204" endtime="20200422 11:35:58.395"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.203" endtime="20200422 11:35:58.395"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.395" endtime="20200422 11:35:58.395"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.197" endtime="20200422 11:35:58.395"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.196" endtime="20200422 11:35:58.396" critical="yes"></status>
+</test>
+<test id="s1-t10" name="DELETE">
+<kw name="RESTFUL SERVICE SWITCHER">
+<arguments>
+<arg>DELETE</arg>
+<arg>users/2</arg>
+<arg>204</arg>
+</arguments>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${DEBUG MODE}'=='Y'</arg>
+<arg>ENABLE DEBUGGER</arg>
+<arg>${debug_flag}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.397" endtime="20200422 11:35:58.397"></status>
+</kw>
+<kw name="Convert To Lowercase" library="String">
+<doc>Converts string to lowercase.</doc>
+<arguments>
+<arg>${method}</arg>
+</arguments>
+<assign>
+<var>${method_type}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.398" level="INFO">${method_type} = delete</msg>
+<status status="PASS" starttime="20200422 11:35:58.397" endtime="20200422 11:35:58.398"></status>
+</kw>
+<kw name="Create List" library="BuiltIn">
+<doc>Returns a list containing given items.</doc>
+<arguments>
+<arg>${query_params}</arg>
+<arg>${resp_code}</arg>
+<arg>${req_body}</arg>
+<arg>${resp_body}</arg>
+</arguments>
+<assign>
+<var>@{args}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.399" level="INFO">@{args} = [ users/2 | 204 |  |  ]</msg>
+<status status="PASS" starttime="20200422 11:35:58.398" endtime="20200422 11:35:58.399"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='get'</arg>
+<arg>GET VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.399" endtime="20200422 11:35:58.400"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='post'</arg>
+<arg>POST VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.400" endtime="20200422 11:35:58.400"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='put'</arg>
+<arg>PUT VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.400" endtime="20200422 11:35:58.401"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='patch'</arg>
+<arg>PATCH VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.401" endtime="20200422 11:35:58.401"></status>
+</kw>
+<kw name="Run Keyword If" library="BuiltIn">
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<arguments>
+<arg>'${method_type}'=='delete'</arg>
+<arg>DELETE VALIDATOR</arg>
+<arg>@{args}</arg>
+</arguments>
+<kw name="DELETE VALIDATOR">
+<arguments>
+<arg>@{args}</arg>
+</arguments>
+<kw name="Delete Request" library="RequestsLibrary">
+<doc>Send a DELETE request on the session object found using the
+given `alias`</doc>
+<arguments>
+<arg>app</arg>
+<arg>/api/${query_params}</arg>
+</arguments>
+<assign>
+<var>${resp}</var>
+</assign>
+<msg timestamp="20200422 11:35:58.403" level="INFO">DELETE Request using : uri=/api/users/2, params=None, allow_redirects=True, timeout=None
+headers={'User-Agent': 'python-requests/2.23.0', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+data=None 
+json=None</msg>
+<msg timestamp="20200422 11:35:58.593" level="INFO">${resp} = &lt;Response [204]&gt;</msg>
+<status status="PASS" starttime="20200422 11:35:58.402" endtime="20200422 11:35:58.593"></status>
+</kw>
+<kw name="Status Should Be" library="RequestsLibrary">
+<doc>Fails if response status code is different than the expected.</doc>
+<arguments>
+<arg>${resp_code}</arg>
+<arg>${resp}</arg>
+</arguments>
+<status status="PASS" starttime="20200422 11:35:58.594" endtime="20200422 11:35:58.595"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.402" endtime="20200422 11:35:58.596"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.402" endtime="20200422 11:35:58.596"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.397" endtime="20200422 11:35:58.596"></status>
+</kw>
+<status status="PASS" starttime="20200422 11:35:58.396" endtime="20200422 11:35:58.596" critical="yes"></status>
+</test>
+<status status="PASS" starttime="20200422 11:35:55.597" endtime="20200422 11:35:58.597"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="10" fail="0">Critical Tests</stat>
+<stat pass="10" fail="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0">regression</stat>
+<stat pass="2" fail="0">smoke</stat>
+</tag>
+<suite>
+<stat pass="10" fail="0" id="s1" name="Data Driven Tests">Data Driven Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
