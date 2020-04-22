@@ -31,7 +31,6 @@ RESPONSE BODY PARSER AND VALIDATOR
     [Arguments]     ${resp_body}    ${server_response_json}
 
     @{items}    split string    ${resp_body}    \n   -1
-
     :FOR    ${i}    IN  @{items}
     \   @{item}    split string    ${i}    =
     \   ${key}    set variable    ${server_response_json${item[0]}}
@@ -40,6 +39,7 @@ RESPONSE BODY PARSER AND VALIDATOR
 
 ENABLE DEBUGGER
     [Arguments]      ${debug_flag}
+
     pass execution if   '${debug_flag}'!='Y'   Skipping Test
     # [DEBUG MODE]:: We can use the above line when we want to run only a few selected tests
     # just mention ${debug_flag} row value as 'Y' in test_data.xlsx file
@@ -49,7 +49,6 @@ GET VALIDATOR
 
     ${resp}     Get Request    app      /api/${query_params}
     Status Should Be    ${resp_code}    ${resp}
-
     ${len}      get length      ${resp_body}
     run keyword if    ${len}>=1     RESPONSE BODY PARSER AND VALIDATOR     ${resp_body}    ${resp.json()}
 
@@ -58,7 +57,6 @@ POST VALIDATOR
 
     ${resp}     Post Request    app      /api/${query_params}      ${req_body}
     Status Should Be    ${resp_code}    ${resp}
-
     ${len}      get length      ${resp_body}
     run keyword if    ${len}>=1     RESPONSE BODY PARSER AND VALIDATOR     ${resp_body}    ${resp.json()}
 
@@ -67,7 +65,6 @@ PUT VALIDATOR
 
     ${resp}     Put Request    app      /api/${query_params}      ${req_body}
     Status Should Be    ${resp_code}    ${resp}
-
     ${len}      get length      ${resp_body}
     run keyword if    ${len}>=1     RESPONSE BODY PARSER AND VALIDATOR     ${resp_body}    ${resp.json()}
 
@@ -76,7 +73,6 @@ PATCH VALIDATOR
 
     ${resp}     Patch Request    app      /api/${query_params}      ${req_body}
     Status Should Be    ${resp_code}    ${resp}
-
     ${len}      get length      ${resp_body}
     run keyword if    ${len}>=1     RESPONSE BODY PARSER AND VALIDATOR     ${resp_body}    ${resp.json()}
 
@@ -85,5 +81,3 @@ DELETE VALIDATOR
 
     ${resp}     Delete Request    app      /api/${query_params}
     Status Should Be    ${resp_code}    ${resp}
-
-
