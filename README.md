@@ -4,7 +4,7 @@ A Data Driven framework for RESTFUL API Testing using Robot Framework.
 ## How it works
 Put all your Test Cases inside the test_data.xlsx file.
 
-![Test Image 4](https://github.com/joydeep100/RobotApiTest/)
+![Sample test date file](https://github.com/joydeep100/RobotApiTest/sample_reports/Excel.jpg)
 sample_reports/Excel.jpg)
 
 ##Pre-Conditions 
