@@ -4,14 +4,15 @@ A Data Driven framework for RESTFUL API Testing using Robot Framework.
 ## How it works
 Put all your Test Cases inside the test_data.xlsx file.
 
-![Test Image 4](https://github.com/tograh/testrepository/3DTest.png)
+![Test Image 4](https://github.com/joydeep100/RobotApiTest/)
+sample_reports/Excel.jpg)
 
 ##Pre-Conditions 
 - Python3
 
 ##Installation steps
 1. Go to the project root
-2. run the command ```pip install -r requirement.txt``` as Admininstrator or root as per the OS.
+2. run the command ```pip install -r requirement.txt``` as Admininstrator or root.
 
 ##Executing Tests
 - run the command ``` robot test_scripts/data_driven_tests.robot``` 
