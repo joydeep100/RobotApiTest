@@ -2,8 +2,7 @@
 Resource    ../common/library_imports.robot
 Resource    ../common/variables.robot
 Test Template     RESTFUL SERVICE SWITCHER
-Suite Setup     Create Session      app     ${base_url}     verify=true
-#'verify' is needed to aviod a SSL warn msg
+Suite Setup     Create Session      app     ${base_url}     verify=true     #'verify' is needed to aviod a SSL warn msg
 
 *** Variables ***
 ${DEBUG MODE}    N  # (Y|N)
@@ -27,6 +26,23 @@ RESTFUL SERVICE SWITCHER
     run keyword if      '${method_type}'=='put'   PUT VALIDATOR    @{args}
     run keyword if      '${method_type}'=='patch'   PATCH VALIDATOR    @{args}
     run keyword if      '${method_type}'=='delete'   DELETE VALIDATOR    @{args}
+
+RESPONSE BODY PARSER AND VALIDATOR
+    [Arguments]     ${resp_body}    ${server_response_json}
+
+    @{items}    split string    ${resp_body}    \n   -1
+
+    :FOR    ${i}    IN  @{items}
+    \   @{item}    split string    ${i}    =
+    \   ${key}    set variable    ${server_response_json${item[0]}}
+    \   ${key_str}    convert to string   ${key}
+    \   should be equal     ${key_str}     ${item[1]}
+
+ENABLE DEBUGGER
+    [Arguments]      ${debug_flag}
+    pass execution if   '${debug_flag}'!='Y'   Skipping Test
+    # [DEBUG MODE]:: We can use the above line when we want to run only a few selected tests
+    # just mention ${debug_flag} row value as 'Y' in test_data.xlsx file
 
 GET VALIDATOR
     [Arguments]     ${query_params}    ${resp_code}    ${req_body}    ${resp_body}
@@ -70,19 +86,4 @@ DELETE VALIDATOR
     ${resp}     Delete Request    app      /api/${query_params}
     Status Should Be    ${resp_code}    ${resp}
 
-RESPONSE BODY PARSER AND VALIDATOR
-    [Arguments]     ${resp_body}    ${server_response_json}
 
-    @{items}    split string    ${resp_body}    \n   -1
-
-    :FOR    ${i}    IN  @{items}
-    \   @{item}    split string    ${i}    =
-    \   ${key}    set variable    ${server_response_json${item[0]}}
-    \   ${key_str}    convert to string   ${key}
-    \   should be equal     ${key_str}     ${item[1]}
-
-ENABLE DEBUGGER
-    [Arguments]      ${debug_flag}
-    pass execution if   '${debug_flag}'!='Y'   Skipping Test
-    # [DEBUG MODE]:: We can use the above line when we want to run only a few selected tests
-    # just mention ${debug_flag} row value as 'Y' in test_data.xlsx file
