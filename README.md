@@ -17,12 +17,12 @@ Put all your Test Cases inside the test_data.xlsx file.
 - run the command ``` robot test_scripts/data_driven_tests.robot``` 
 
 ## Debug a single/ selected tests
-1. make the ${DEBUG MODE} variable as 'Y' in the test script file.
-2. for all the tests where you need to run, ust mention ${debug_flag} row value as 'Y' in test_data.xlsx file
+1. make the `${DEBUG MODE}` variable as `'Y'` in the test script file.
+2. for all the tests where you need to run, ust mention `${debug_flag}` row value as `'Y'` in `test_data.xlsx` file
 
 ## TestData file inputs
 All the fiels are self explanatory
-- for ${req_body} give the expected json (if any)
+- for `${req_body}` give the expected json (if any)
 - for validating the response body value, given new line separated nested key names. for example,
   Assume this is the reponse json.
     ```"{
