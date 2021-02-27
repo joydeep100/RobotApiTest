@@ -1,6 +1,8 @@
 # RobotApiTest
 A Data Driven framework for RESTFUL API Testing using Robot Framework.
 
+p.s. - Also added a simple selenium test script (cargo.robot)
+
 ## How it works
 Put all your Test Cases inside the `test_data.xlsx` file.
 
